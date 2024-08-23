@@ -29,6 +29,10 @@ i.e.
 docker build -t ace --build-arg USERNAME=<Username> --build-arg PASSWORD=<Password> --build-arg DOWNLOAD_URL=<download URL>  --file ./Dockerfile .
 ```
 
+## Obtain a copy of ACE Developer Edition
+You can use the following site to grab a copy of AVE Developer off the IBM web site:
+<https://www.ibm.com/docs/en/app-connect/12.0?topic=enterprise-download-ace-developer-edition-get-started>
+
 ### DOWNLOAD_URL
 
 The link is likely to be of the form

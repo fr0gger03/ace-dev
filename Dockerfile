@@ -36,18 +36,11 @@ RUN microdnf update -y && microdnf install -y findutils util-linux which tar && 
 
 # Install ACE v12.0.4.0 and accept the license
 COPY --from=builder /opt/ibm/ace-12 /opt/ibm/ace-12
-# RUN export LICENSE=accept \
-#     && /opt/ibm/ace-12/ace make registry global accept license deferred \
-#     && useradd --uid 1001 --create-home --home-dir /home/aceuser --shell /bin/bash -G mqbrkrs aceuser \
-#     && su - aceuser -c "export LICENSE=accept && . /opt/ibm/ace-12/server/bin/mqsiprofile && mqsicreateworkdir /home/aceuser/ace-server" \
-#     && echo ". /opt/ibm/ace-12/server/bin/mqsiprofile" >> /home/aceuser/.bashrc
-
-RUN export LICENSE=accept
-RUN /opt/ibm/ace-12/ace make registry global accept license deferred
-RUN useradd --uid 1001 --create-home --home-dir /home/aceuser --shell /bin/bash -G mqbrkrs aceuser
-RUN su - aceuser -c "export LICENSE=accept && . /opt/ibm/ace-12/server/bin/mqsiprofile && mqsicreateworkdir /home/aceuser/ace-server"
-RUN echo ". /opt/ibm/ace-12/server/bin/mqsiprofile" >> /home/aceuser/.bashrc
-
+RUN export LICENSE=accept \
+    && /opt/ibm/ace-12/ace make registry global accept license deferred \
+    && useradd --uid 1001 --create-home --home-dir /home/aceuser --shell /bin/bash -G mqbrkrs aceuser \
+    && su - aceuser -c "export LICENSE=accept && . /opt/ibm/ace-12/server/bin/mqsiprofile && mqsicreateworkdir /home/aceuser/ace-server" \
+    && echo ". /opt/ibm/ace-12/server/bin/mqsiprofile" >> /home/aceuser/.bashrc
 
 # Add required license as text file in Liceses directory (GPL, MIT, APACHE, Partner End User Agreement, etc)
 COPY /licenses/ /licenses/
