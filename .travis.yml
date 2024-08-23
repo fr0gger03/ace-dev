@@ -1,0 +1,19 @@
+os: linux
+dist: bionic
+language: shell
+services:
+  - docker
+env:
+  global:
+    - DOWNLOAD_URL=https://na.artifactory.swg-devops.com/artifactory/appconnect-iiboc/prereqs/builds/12.0.10.0/xLinux/ace-12.0.10.0.tar.gz
+install:
+  - docker system info
+  - touch  git.commit
+  - docker build --no-cache -t testbuild --build-arg DOWNLOAD_URL=$DOWNLOAD_URL  --build-arg USERNAME=$ARTIFACTORY_USER --build-arg PASSWORD=$ARTIFACTORY_ACCESS_TOKEN -f ./Dockerfile .
+  - cd samples/bars
+  - docker build -t aceapp --build-arg FROMIMAGE=testbuild --file Dockerfile .
+  - cd ../mqclient
+  - docker build -t aceappmqclient --build-arg FROMIMAGE=aceapp --build-arg MQ_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/messaging/mqdev/redist/9.3.0.1-IBM-MQC-Redist-LinuxX64.tar.gz --file Dockerfile .
+  - docker run -d -p 7800:7800 --env LICENSE=accept --name aceapp aceappmqclient
+script:
+  - ../bars/test.sh
